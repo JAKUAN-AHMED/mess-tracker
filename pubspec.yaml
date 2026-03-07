@@ -1,0 +1,52 @@
+name: mess_hisab_tracker
+description: Mess Hisab Tracker - Production ready mess management app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.4.9
+
+  # Database
+  sqflite: ^2.3.2
+  path: ^1.9.0
+
+  # File & Storage
+  path_provider: ^2.1.2
+  file_picker: ^6.1.1
+  share_plus: ^7.2.1
+
+  # PDF & Excel reports
+  pdf: ^3.10.8
+  printing: ^5.11.3
+  excel: ^4.0.3
+
+  # Email
+  mailer: ^6.1.0
+
+  # UI
+  google_fonts: ^6.1.0
+  fl_chart: ^0.66.2
+  intl: ^0.19.0
+  flutter_slidable: ^3.0.1
+  gap: ^3.0.1
+  iconsax: ^0.0.8
+
+  # Utilities
+  uuid: ^4.3.3
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  sqflite_common_ffi: ^2.3.2
+
+flutter:
+  uses-material-design: true
