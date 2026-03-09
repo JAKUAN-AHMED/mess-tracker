@@ -48,8 +48,8 @@ class ChatHubScreen extends ConsumerWidget {
                             color: Colors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: const Text('💬',
-                              style: TextStyle(fontSize: 22)),
+                          child: const Icon(Icons.chat_bubble_rounded,
+                              color: Colors.white, size: 22),
                         ),
                         const SizedBox(width: 14),
                         const Column(
@@ -86,7 +86,7 @@ class ChatHubScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SectionLabel(label: '🌐 গ্রুপ চ্যাট'),
+                  _SectionLabel(icon: Icons.groups_rounded, label: 'গ্রুপ চ্যাট'),
                   const SizedBox(height: 10),
                   _GroupChatTile(onTap: () {
                     Navigator.push(
@@ -95,7 +95,7 @@ class ChatHubScreen extends ConsumerWidget {
                     );
                   }),
                   const SizedBox(height: 20),
-                  _SectionLabel(label: '💌 ব্যক্তিগত চ্যাট'),
+                  _SectionLabel(icon: Icons.person_rounded, label: 'ব্যক্তিগত চ্যাট'),
                   const SizedBox(height: 10),
                 ],
               ),
@@ -170,17 +170,31 @@ class ChatHubScreen extends ConsumerWidget {
 }
 
 class _SectionLabel extends StatelessWidget {
+  final IconData icon;
   final String label;
-  const _SectionLabel({required this.label});
+  const _SectionLabel({required this.icon, required this.label});
 
   @override
-  Widget build(BuildContext context) => Text(
-        label,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w800,
-          color: Color(0xFF1A1A2E),
-        ),
+  Widget build(BuildContext context) => Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: const Color(0xFF4F46E5).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 16, color: const Color(0xFF4F46E5)),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF1A1A2E),
+            ),
+          ),
+        ],
       );
 }
 
@@ -221,7 +235,7 @@ class _GroupChatTile extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Center(
-                child: Text('👥', style: TextStyle(fontSize: 26)),
+                child: Icon(Icons.groups_rounded, color: Colors.white, size: 28),
               ),
             ),
             const SizedBox(width: 14),

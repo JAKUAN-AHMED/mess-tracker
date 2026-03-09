@@ -61,7 +61,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 color: Colors.white.withOpacity(0.4), width: 2),
                           ),
                           child: const Center(
-                            child: Text('👑', style: TextStyle(fontSize: 44)),
+                            child: Icon(Icons.manage_accounts_rounded,
+                                color: Colors.white, size: 44),
                           ),
                         ),
                       ),

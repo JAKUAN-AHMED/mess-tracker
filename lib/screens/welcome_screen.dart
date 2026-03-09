@@ -75,7 +75,6 @@ class WelcomeScreen extends ConsumerWidget {
                     icon: Icons.manage_accounts_rounded,
                     title: 'ম্যানেজার',
                     subtitle: isSetup ? 'লগইন করুন' : 'মেস তৈরি করুন',
-                    emoji: '👑',
                     onTap: () {
                       if (isSetup) {
                         Navigator.push(
@@ -98,7 +97,6 @@ class WelcomeScreen extends ConsumerWidget {
                     icon: Icons.person_add_alt_1_rounded,
                     title: 'সদস্য',
                     subtitle: 'মেসে যোগ দিন',
-                    emoji: '🙋',
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => const JoinScreen())),
@@ -133,7 +131,6 @@ class _OptionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final String emoji;
   final VoidCallback onTap;
 
   const _OptionCard({
@@ -141,7 +138,6 @@ class _OptionCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.emoji,
     required this.onTap,
   });
 
@@ -173,7 +169,7 @@ class _OptionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Center(
-                child: Text(emoji, style: const TextStyle(fontSize: 30)),
+                child: Icon(icon, color: Colors.white, size: 32),
               ),
             ),
             const SizedBox(width: 20),

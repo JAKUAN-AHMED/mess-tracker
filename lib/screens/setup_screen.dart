@@ -59,7 +59,8 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
                             color: Colors.white),
                       ),
                       const SizedBox(height: 16),
-                      const Text('👑', style: TextStyle(fontSize: 40)),
+                      const Icon(Icons.manage_accounts_rounded,
+                          color: Colors.white, size: 44),
                       const SizedBox(height: 12),
                       const Text(
                         'মেস তৈরি করুন',
@@ -185,7 +186,7 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
                                       ),
                                     ),
                                     child: const Text(
-                                      'মেস তৈরি করুন 🚀',
+                                      'মেস তৈরি করুন',
                                       style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800),

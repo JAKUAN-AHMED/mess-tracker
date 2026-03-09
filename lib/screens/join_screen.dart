@@ -66,7 +66,8 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                 color: Colors.white.withOpacity(0.4), width: 2),
                           ),
                           child: const Center(
-                            child: Text('🙋', style: TextStyle(fontSize: 44)),
+                            child: Icon(Icons.person_add_alt_1_rounded,
+                                color: Colors.white, size: 44),
                           ),
                         ),
                       ),
@@ -173,7 +174,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                       ),
                                     ),
                                     child: const Text(
-                                      'যোগ দিন 🎉',
+                                      'যোগ দিন',
                                       style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800),

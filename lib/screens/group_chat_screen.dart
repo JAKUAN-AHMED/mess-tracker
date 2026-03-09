@@ -65,7 +65,7 @@ class _GroupChatScreenState extends ConsumerState<GroupChatScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Center(
-                child: Text('👥', style: TextStyle(fontSize: 20)),
+                child: Icon(Icons.groups_rounded, color: Colors.white, size: 22),
               ),
             ),
             const SizedBox(width: 10),
@@ -111,8 +111,8 @@ class _GroupChatScreenState extends ConsumerState<GroupChatScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text('💬',
-                            style: TextStyle(fontSize: 60)),
+                        Icon(Icons.chat_bubble_outline_rounded,
+                            size: 60, color: Colors.grey.shade400),
                         const SizedBox(height: 12),
                         Text(
                           'গ্রুপ চ্যাট শুরু করুন!',

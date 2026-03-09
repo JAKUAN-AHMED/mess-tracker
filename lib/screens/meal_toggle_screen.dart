@@ -281,7 +281,7 @@ class _MealGrid extends ConsumerWidget {
                             Expanded(
                               child: _MealChip(
                                 label: 'সকাল',
-                                emoji: '🌅',
+                                icon: Icons.wb_twilight_rounded,
                                 active: meal.breakfast,
                                 activeColor: const Color(0xFFFF6B35),
                                 onTap: () => onToggle(
@@ -293,7 +293,7 @@ class _MealGrid extends ConsumerWidget {
                             Expanded(
                               child: _MealChip(
                                 label: 'দুপুর',
-                                emoji: '☀️',
+                                icon: Icons.wb_sunny_rounded,
                                 active: meal.lunch,
                                 activeColor: const Color(0xFFF59E0B),
                                 onTap: () => onToggle(
@@ -304,7 +304,7 @@ class _MealGrid extends ConsumerWidget {
                             Expanded(
                               child: _MealChip(
                                 label: 'রাত',
-                                emoji: '🌙',
+                                icon: Icons.nights_stay_rounded,
                                 active: meal.dinner,
                                 activeColor: const Color(0xFF6C3CE1),
                                 onTap: () => onToggle(
@@ -329,14 +329,14 @@ class _MealGrid extends ConsumerWidget {
 
 class _MealChip extends StatelessWidget {
   final String label;
-  final String emoji;
+  final IconData icon;
   final bool active;
   final Color activeColor;
   final VoidCallback onTap;
 
   const _MealChip({
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.active,
     required this.activeColor,
     required this.onTap,
@@ -363,10 +363,10 @@ class _MealChip extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              active ? emoji : '○',
-              style: TextStyle(
-                  fontSize: active ? 20 : 16),
+            Icon(
+              icon,
+              size: active ? 22 : 18,
+              color: active ? activeColor : Colors.grey.shade400,
             ),
             const SizedBox(height: 4),
             Text(

@@ -136,9 +136,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Center(
-                          child: Text(
-                            auth.status == AuthStatus.manager ? '👑' : '🙋',
-                            style: const TextStyle(fontSize: 26),
+                          child: Icon(
+                            auth.status == AuthStatus.manager
+                                ? Icons.manage_accounts_rounded
+                                : Icons.person_rounded,
+                            color: Colors.white,
+                            size: 28,
                           ),
                         ),
                       ),
@@ -181,7 +184,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 20),
 
                 // Backup section
-                _sectionLabel('💾 ডেটা ব্যাকআপ'),
+                _sectionLabel('ডেটা ব্যাকআপ', icon: Icons.backup_rounded),
                 const SizedBox(height: 10),
                 _settingsCard([
                   _settingsTile(
@@ -235,7 +238,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 20),
 
                 // Email section
-                _sectionLabel('📧 ইমেইল সেটিংস'),
+                _sectionLabel('ইমেইল সেটিংস', icon: Icons.email_rounded),
                 const SizedBox(height: 10),
                 Container(
                   decoration: BoxDecoration(
@@ -338,7 +341,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 20),
 
                 // Send report
-                _sectionLabel('📊 রিপোর্ট পাঠান'),
+                _sectionLabel('রিপোর্ট পাঠান', icon: Icons.bar_chart_rounded),
                 const SizedBox(height: 10),
                 _settingsCard([
                   _settingsTile(
@@ -398,13 +401,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 
-  Widget _sectionLabel(String text) => Text(
-        text,
-        style: const TextStyle(
-          fontWeight: FontWeight.w800,
-          fontSize: 15,
-          color: Color(0xFF1A1A2E),
-        ),
+  Widget _sectionLabel(String text, {IconData? icon}) => Row(
+        children: [
+          if (icon != null) ...[
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 16, color: AppColors.primary),
+            ),
+            const SizedBox(width: 8),
+          ],
+          Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 15,
+              color: Color(0xFF1A1A2E),
+            ),
+          ),
+        ],
       );
 
   Widget _settingsCard(List<Widget> children) => Container(
