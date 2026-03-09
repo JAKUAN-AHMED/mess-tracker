@@ -19,8 +19,8 @@ dependencies:
 
   # File & Storage
   path_provider: ^2.1.2
-  file_picker: ^6.1.1
-  share_plus: ^7.2.1
+  file_picker: ^10.0.0
+  share_plus: ^10.0.0
 
   # PDF & Excel reports
   pdf: ^3.10.8

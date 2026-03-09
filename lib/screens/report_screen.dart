@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import '../providers/mess_month_provider.dart';
 import '../providers/report_provider.dart';
 import '../services/report_service.dart';
+import '../theme/app_theme.dart';
 import '../widgets/common_widgets.dart' hide ErrorWidget;
 
 class ReportScreen extends ConsumerWidget {
@@ -16,7 +16,7 @@ class ReportScreen extends ConsumerWidget {
     final months = ref.watch(messMonthListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('মাসিক রিপোর্ট')),
+      backgroundColor: const Color(0xFFF0F7FF),
       body: months.when(
         loading: () => const LoadingWidget(),
         error: (e, _) => Center(child: Text('ত্রুটি: $e')),
@@ -54,188 +54,444 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final month = widget.months.firstWhere((m) => m.id == _selectedMonthId);
+    final month =
+        widget.months.firstWhere((m) => m.id == _selectedMonthId);
     final report = ref.watch(monthlyReportProvider(_selectedMonthId));
 
-    return Column(
-      children: [
-        // Month selector
-        Container(
-          padding: const EdgeInsets.all(12),
-          color: Theme.of(context).colorScheme.surfaceVariant,
-          child: DropdownButtonFormField<int>(
-            value: _selectedMonthId,
-            decoration: const InputDecoration(
-              labelText: 'মাস নির্বাচন করুন',
-              border: OutlineInputBorder(),
-              filled: true,
+    return CustomScrollView(
+      slivers: [
+        // AppBar
+        SliverAppBar(
+          expandedHeight: 130,
+          floating: false,
+          pinned: true,
+          backgroundColor: AppColors.blue,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              decoration: const BoxDecoration(
+                  gradient: AppColors.gradientTealBlue),
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Icon(Icons.bar_chart_rounded,
+                            color: Colors.white, size: 26),
+                      ),
+                      const SizedBox(width: 14),
+                      const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'মাসিক রিপোর্ট',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          Text(
+                            'বিস্তারিত হিসাব-নিকাশ',
+                            style: TextStyle(
+                                color: Colors.white70, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            items: widget.months
-                .map((m) => DropdownMenuItem(
-                    value: m.id as int, child: Text(m.label as String)))
-                .toList(),
-            onChanged: (v) => setState(() => _selectedMonthId = v!),
           ),
         ),
-        Expanded(
-          child: report.when(
-            loading: () => const LoadingWidget(),
-            error: (e, _) => Center(child: Text('ত্রুটি: $e')),
-            data: (r) => ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
+
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              child: DropdownButtonFormField<int>(
+                value: _selectedMonthId,
+                decoration: InputDecoration(
+                  labelText: 'মাস নির্বাচন করুন',
+                  prefixIcon: Container(
+                    margin: const EdgeInsets.all(10),
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      gradient: AppColors.gradientTealBlue,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.calendar_month_rounded,
+                        color: Colors.white, size: 18),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+                items: widget.months
+                    .map((m) => DropdownMenuItem(
+                        value: m.id as int,
+                        child: Text(m.label as String)))
+                    .toList(),
+                onChanged: (v) =>
+                    setState(() => _selectedMonthId = v!),
+              ),
+            ),
+          ),
+        ),
+
+        report.when(
+          loading: () => const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator())),
+          error: (e, _) => SliverFillRemaining(
+              child: Center(child: Text('ত্রুটি: $e'))),
+          data: (r) => SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
                 // Summary cards
                 Row(
                   children: [
                     Expanded(
-                      child: SummaryCard(
+                      child: _ReportStatCard(
                         label: 'মোট খরচ',
                         value: '${r.totalExpenses.toStringAsFixed(0)} ৳',
-                        icon: Icons.shopping_cart,
-                        iconColor: Colors.orange,
+                        icon: Icons.shopping_basket_rounded,
+                        gradient: AppColors.gradientOrangeYellow,
                       ),
                     ),
-                    const Gap(8),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: SummaryCard(
+                      child: _ReportStatCard(
                         label: 'মিল রেট',
                         value: '${r.mealRate.toStringAsFixed(2)} ৳',
-                        icon: Icons.restaurant,
-                        iconColor: Colors.teal,
+                        icon: Icons.restaurant_rounded,
+                        gradient: AppColors.gradientTealBlue,
                       ),
                     ),
                   ],
                 ),
-                const Gap(16),
-                const SectionHeader(title: 'সদস্য হিসাব'),
-                const Gap(8),
-                // Table header
-                _tableHeader(context),
-                const Divider(height: 1),
-                ...r.summaries.map((s) => Column(
-                      children: [
-                        Padding(
+                const SizedBox(height: 20),
+
+                // Member table
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 12,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      // Header
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 12),
+                        decoration: BoxDecoration(
+                          gradient: AppColors.gradientTealBlue,
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(18)),
+                        ),
+                        child: const Row(
+                          children: [
+                            Expanded(
+                                flex: 3,
+                                child: Text('সদস্য',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12))),
+                            Expanded(
+                                child: Text('মিল',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12))),
+                            Expanded(
+                                child: Text('জমা',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12))),
+                            Expanded(
+                                child: Text('খরচ',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12))),
+                            Expanded(
+                                child: Text('ব্যালেন্স',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12))),
+                          ],
+                        ),
+                      ),
+
+                      // Rows
+                      ...r.summaries.asMap().entries.map((entry) {
+                        final i = entry.key;
+                        final s = entry.value;
+                        final isPositive = s.balance >= 0;
+                        return Container(
+                          color: i.isOdd
+                              ? Colors.grey.shade50
+                              : Colors.white,
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 4),
+                              horizontal: 14, vertical: 10),
                           child: Row(
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: Text(s.member.name,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500)),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 28,
+                                      height: 28,
+                                      decoration: BoxDecoration(
+                                        gradient: isPositive
+                                            ? AppColors.gradientGreenTeal
+                                            : AppColors.gradientPinkOrange,
+                                        borderRadius:
+                                            BorderRadius.circular(8),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          s.member.name
+                                              .substring(0, 1)
+                                              .toUpperCase(),
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        s.member.name,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Expanded(
                                 child: Text(
                                   s.totalMealUnits.toStringAsFixed(1),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ),
                               Expanded(
                                 child: Text(
                                   s.totalDeposit.toStringAsFixed(0),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ),
                               Expanded(
                                 child: Text(
                                   s.mealCost.toStringAsFixed(0),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ),
                               Expanded(
-                                child: Text(
-                                  (s.balance >= 0 ? '+' : '') +
-                                      s.balance.toStringAsFixed(0),
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: s.balance >= 0
-                                        ? Colors.green.shade700
-                                        : Colors.red.shade700,
-                                    fontWeight: FontWeight.bold,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: isPositive
+                                        ? AppColors.green
+                                            .withOpacity(0.12)
+                                        : AppColors.red.withOpacity(0.12),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    '${isPositive ? '+' : ''}${s.balance.toStringAsFixed(0)}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w800,
+                                      color: isPositive
+                                          ? AppColors.green
+                                          : AppColors.red,
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const Divider(height: 1),
-                      ],
-                    )),
-                const Gap(20),
+                        );
+                      }),
+
+                      // Bottom border radius
+                      const SizedBox(height: 4),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
                 // Export buttons
                 Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton.icon(
-                        icon: const Icon(Icons.picture_as_pdf),
-                        label: const Text('PDF'),
-                        onPressed: () async {
-                          final file =
-                              await ReportService.generatePdf(r, month);
-                          await Printing.sharePdf(
-                              bytes: await file.readAsBytes(),
-                              filename: file.path.split('/').last);
-                        },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: AppColors.gradientPinkOrange,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            final file = await ReportService.generatePdf(
+                                r, month);
+                            await Printing.sharePdf(
+                                bytes: await file.readAsBytes(),
+                                filename:
+                                    file.path.split('/').last);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14)),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 14),
+                          ),
+                          icon: const Icon(Icons.picture_as_pdf_rounded),
+                          label: const Text('PDF',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800)),
+                        ),
                       ),
                     ),
-                    const Gap(8),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: OutlinedButton.icon(
-                        icon: const Icon(Icons.table_chart),
-                        label: const Text('Excel'),
-                        onPressed: () async {
-                          final file =
-                              await ReportService.generateExcel(r, month);
-                          await Share.shareXFiles([XFile(file.path)]);
-                        },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: AppColors.gradientGreenTeal,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            final file =
+                                await ReportService.generateExcel(
+                                    r, month);
+                            await Share.shareXFiles(
+                                [XFile(file.path)]);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14)),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 14),
+                          ),
+                          icon: const Icon(Icons.table_chart_rounded),
+                          label: const Text('Excel',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800)),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ],
+              ]),
             ),
           ),
         ),
       ],
     );
   }
+}
 
-  Widget _tableHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      child: Row(
+class _ReportStatCard extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+  final LinearGradient gradient;
+
+  const _ReportStatCard({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.gradient,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: gradient.colors.first.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-              flex: 3,
-              child: Text('সদস্য',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold))),
-          Expanded(
-              child: Text('মিল',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold))),
-          Expanded(
-              child: Text('জমা',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold))),
-          Expanded(
-              child: Text('খরচ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold))),
-          Expanded(
-              child: Text('ব্যালেন্স',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold))),
+          Icon(icon, color: Colors.white, size: 24),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.85),
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );

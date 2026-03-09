@@ -2,9 +2,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/member.dart';
 import '../models/expense.dart';
+import '../models/expense_item.dart';
 import '../models/deposit.dart';
 import '../models/meal.dart';
 import '../models/mess_month.dart';
+import '../models/chat_message.dart';
 
 class DBHelper {
   static final DBHelper _instance = DBHelper._internal();
@@ -23,9 +25,10 @@ class DBHelper {
     final path = join(dbPath, 'mess_hisab.db');
     return openDatabase(
       path,
-      version: 1,
+      version: 3,
       onCreate: _onCreate,
-      onForeignKeys: (db) async => db.execute('PRAGMA foreign_keys = ON'),
+      onUpgrade: _onUpgrade,
+      onOpen: (db) async => db.execute('PRAGMA foreign_keys = ON'),
     );
   }
 
@@ -46,6 +49,7 @@ class DBHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         phone TEXT,
+        email TEXT,
         join_date TEXT NOT NULL,
         is_active INTEGER NOT NULL DEFAULT 1
       )
@@ -60,6 +64,16 @@ class DBHelper {
         added_by TEXT NOT NULL,
         mess_month_id INTEGER NOT NULL,
         FOREIGN KEY (mess_month_id) REFERENCES mess_months(id)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE expense_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        expense_id INTEGER NOT NULL,
+        item_name TEXT NOT NULL,
+        price REAL NOT NULL,
+        FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE
       )
     ''');
 
@@ -88,6 +102,81 @@ class DBHelper {
         FOREIGN KEY (member_id) REFERENCES members(id)
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE app_config (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE chat_messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender_name TEXT NOT NULL,
+        message TEXT NOT NULL,
+        timestamp TEXT NOT NULL,
+        chat_type TEXT NOT NULL DEFAULT 'group',
+        receiver_name TEXT NOT NULL DEFAULT ''
+      )
+    ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      try {
+        await db.execute('ALTER TABLE members ADD COLUMN email TEXT');
+      } catch (_) {}
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS expense_items (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          expense_id INTEGER NOT NULL,
+          item_name TEXT NOT NULL,
+          price REAL NOT NULL,
+          FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE
+        )
+      ''');
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS app_config (
+          key TEXT PRIMARY KEY,
+          value TEXT NOT NULL
+        )
+      ''');
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS chat_messages (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          sender_name TEXT NOT NULL,
+          message TEXT NOT NULL,
+          timestamp TEXT NOT NULL,
+          chat_type TEXT NOT NULL DEFAULT 'group',
+          receiver_name TEXT NOT NULL DEFAULT ''
+        )
+      ''');
+    }
+  }
+
+  // ─── App Config ──────────────────────────────────────────────────────────────
+
+  Future<void> setConfig(String key, String value) async {
+    final db = await database;
+    await db.insert(
+      'app_config',
+      {'key': key, 'value': value},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<String?> getConfig(String key) async {
+    final db = await database;
+    final rows = await db.query('app_config', where: 'key = ?', whereArgs: [key]);
+    return rows.isEmpty ? null : rows.first['value'] as String;
+  }
+
+  Future<bool> isSetupDone() async {
+    final code = await getConfig('mess_code');
+    return code != null && code.isNotEmpty;
   }
 
   // ─── MessMonth ───────────────────────────────────────────────────────────────
@@ -163,6 +252,22 @@ class DBHelper {
     return db.insert('expenses', e.toMap());
   }
 
+  Future<int> insertExpenseWithItems(Expense e, List<ExpenseItem> items) async {
+    final db = await database;
+    int expenseId = 0;
+    await db.transaction((txn) async {
+      expenseId = await txn.insert('expenses', e.toMap());
+      for (final item in items) {
+        await txn.insert('expense_items', {
+          'expense_id': expenseId,
+          'item_name': item.itemName,
+          'price': item.price,
+        });
+      }
+    });
+    return expenseId;
+  }
+
   Future<List<Expense>> getExpenses(int messMonthId) async {
     final db = await database;
     final rows = await db.query(
@@ -172,6 +277,16 @@ class DBHelper {
       orderBy: 'date DESC',
     );
     return rows.map(Expense.fromMap).toList();
+  }
+
+  Future<List<ExpenseItem>> getExpenseItems(int expenseId) async {
+    final db = await database;
+    final rows = await db.query(
+      'expense_items',
+      where: 'expense_id = ?',
+      whereArgs: [expenseId],
+    );
+    return rows.map(ExpenseItem.fromMap).toList();
   }
 
   Future<double> getTotalExpenses(int messMonthId) async {
@@ -188,8 +303,27 @@ class DBHelper {
     await db.update('expenses', e.toMap(), where: 'id = ?', whereArgs: [e.id]);
   }
 
+  Future<void> updateExpenseWithItems(
+      Expense e, List<ExpenseItem> items) async {
+    final db = await database;
+    await db.transaction((txn) async {
+      await txn.update('expenses', e.toMap(),
+          where: 'id = ?', whereArgs: [e.id]);
+      await txn.delete('expense_items',
+          where: 'expense_id = ?', whereArgs: [e.id]);
+      for (final item in items) {
+        await txn.insert('expense_items', {
+          'expense_id': e.id,
+          'item_name': item.itemName,
+          'price': item.price,
+        });
+      }
+    });
+  }
+
   Future<void> deleteExpense(int id) async {
     final db = await database;
+    await db.delete('expense_items', where: 'expense_id = ?', whereArgs: [id]);
     await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
   }
 
@@ -277,6 +411,65 @@ class DBHelper {
     final rows =
         await db.query('mess_months', where: 'id = ?', whereArgs: [id]);
     return rows.isEmpty ? null : MessMonth.fromMap(rows.first);
+  }
+
+  // ─── Chat ─────────────────────────────────────────────────────────────────────
+
+  Future<int> insertChatMessage(ChatMessage msg) async {
+    final db = await database;
+    return db.insert('chat_messages', msg.toMap());
+  }
+
+  Future<List<ChatMessage>> getGroupMessages({int limit = 100}) async {
+    final db = await database;
+    final rows = await db.query(
+      'chat_messages',
+      where: "chat_type = 'group'",
+      orderBy: 'timestamp DESC',
+      limit: limit,
+    );
+    return rows.map(ChatMessage.fromMap).toList().reversed.toList();
+  }
+
+  Future<List<ChatMessage>> getPrivateMessages(
+      String user1, String user2, {int limit = 100}) async {
+    final db = await database;
+    final rows = await db.query(
+      'chat_messages',
+      where: "chat_type = 'private' AND ((sender_name = ? AND receiver_name = ?) OR (sender_name = ? AND receiver_name = ?))",
+      whereArgs: [user1, user2, user2, user1],
+      orderBy: 'timestamp DESC',
+      limit: limit,
+    );
+    return rows.map(ChatMessage.fromMap).toList().reversed.toList();
+  }
+
+  Future<ChatMessage?> getLastPrivateMessage(String user1, String user2) async {
+    final db = await database;
+    final rows = await db.query(
+      'chat_messages',
+      where: "chat_type = 'private' AND ((sender_name = ? AND receiver_name = ?) OR (sender_name = ? AND receiver_name = ?))",
+      whereArgs: [user1, user2, user2, user1],
+      orderBy: 'timestamp DESC',
+      limit: 1,
+    );
+    return rows.isEmpty ? null : ChatMessage.fromMap(rows.first);
+  }
+
+  Future<ChatMessage?> getLastGroupMessage() async {
+    final db = await database;
+    final rows = await db.query(
+      'chat_messages',
+      where: "chat_type = 'group'",
+      orderBy: 'timestamp DESC',
+      limit: 1,
+    );
+    return rows.isEmpty ? null : ChatMessage.fromMap(rows.first);
+  }
+
+  Future<void> deleteChatMessage(int id) async {
+    final db = await database;
+    await db.delete('chat_messages', where: 'id = ?', whereArgs: [id]);
   }
 
   // ─── Close ───────────────────────────────────────────────────────────────────

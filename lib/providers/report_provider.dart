@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/member.dart';
 import 'db_provider.dart';
-import 'mess_month_provider.dart';
 
 class MemberSummary {
   final Member member;
