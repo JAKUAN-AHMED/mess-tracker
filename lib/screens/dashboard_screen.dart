@@ -467,7 +467,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 const SizedBox(height: 20),
                 DropdownButtonFormField<int>(
-                  value: selectedYear,
+                  initialValue: selectedYear,
                   decoration: InputDecoration(
                     labelText: 'বছর',
                     border: OutlineInputBorder(
@@ -481,7 +481,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<int>(
-                  value: selectedMonth,
+                  initialValue: selectedMonth,
                   decoration: InputDecoration(
                     labelText: 'মাস',
                     border: OutlineInputBorder(

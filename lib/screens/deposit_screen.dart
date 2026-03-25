@@ -348,7 +348,7 @@ class _DepositList extends ConsumerWidget {
                                   color: Colors.grey.shade100),
                             ),
                             child: DropdownButtonFormField<int>(
-                              value: selectedMemberId,
+                              initialValue: selectedMemberId,
                               decoration: InputDecoration(
                                 labelText: 'সদস্য *',
                                 prefixIcon: Container(

@@ -215,12 +215,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     trailing: const Icon(Icons.folder_open_rounded,
                         color: AppColors.accent),
                     onTap: () async {
+                      final messenger = ScaffoldMessenger.of(context);
                       final confirmed = await _confirmRestore();
                       if (confirmed == true) {
                         try {
                           await BackupService.importBackup();
                           if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            messenger.showSnackBar(
                               const SnackBar(
                                   content: Text(
                                       'পুনরুদ্ধার সফল। অ্যাপ পুনরায় চালু করুন।')),
@@ -228,7 +229,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           }
                         } catch (e) {
                           if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            messenger.showSnackBar(
                                 SnackBar(content: Text('ত্রুটি: $e')));
                           }
                         }
@@ -368,9 +369,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                     child: ElevatedButton.icon(
                       onPressed: () async {
+                        final navigator = Navigator.of(context);
                         await ref.read(authProvider.notifier).logout();
                         if (mounted) {
-                          Navigator.of(context).pushAndRemoveUntil(
+                          navigator.pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (_) => const WelcomeScreen()),
                             (_) => false,

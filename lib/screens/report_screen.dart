@@ -130,7 +130,7 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
                 ],
               ),
               child: DropdownButtonFormField<int>(
-                value: _selectedMonthId,
+                initialValue: _selectedMonthId,
                 decoration: InputDecoration(
                   labelText: 'মাস নির্বাচন করুন',
                   prefixIcon: Container(
