@@ -3,27 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/chat_message.dart';
 import 'db_provider.dart';
 
-// Group chat - auto-refreshes every 2 seconds
+// Group chat - reactive stream (no more polling!)
 class GroupChatNotifier extends Notifier<AsyncValue<List<ChatMessage>>> {
-  Timer? _timer;
+  StreamSubscription<List<ChatMessage>>? _sub;
 
   @override
   AsyncValue<List<ChatMessage>> build() {
-    _load();
-    // Poll every 2s for fast "real-time" feel
-    _timer = Timer.periodic(const Duration(seconds: 2), (_) => _load());
-    ref.onDispose(() => _timer?.cancel());
+    _startListening();
+    ref.onDispose(() => _sub?.cancel());
     return const AsyncValue.loading();
   }
 
-  Future<void> _load() async {
-    try {
-      final db = ref.read(dbHelperProvider);
-      final msgs = await db.getGroupMessages();
-      state = AsyncValue.data(msgs);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+  void _startListening() {
+    final db = ref.read(dbHelperProvider);
+    _sub = db.watchGroupMessages().listen(
+      (msgs) => state = AsyncValue.data(msgs),
+      onError: (e, st) => state = AsyncValue.error(e, st),
+    );
   }
 
   Future<void> send(String senderName, String message) async {
@@ -34,13 +30,13 @@ class GroupChatNotifier extends Notifier<AsyncValue<List<ChatMessage>>> {
       timestamp: DateTime.now().toIso8601String(),
       chatType: 'group',
     ));
-    await _load();
+    // Stream fires automatically - no manual reload needed
   }
 
   Future<void> delete(int id) async {
     final db = ref.read(dbHelperProvider);
     await db.deleteChatMessage(id);
-    await _load();
+    // Stream fires automatically
   }
 }
 
@@ -48,34 +44,31 @@ final groupChatProvider =
     NotifierProvider<GroupChatNotifier, AsyncValue<List<ChatMessage>>>(
         GroupChatNotifier.new);
 
-// Private chat - parameterized by "user1|user2" sorted key
+// Private chat - reactive stream per conversation
 class PrivateChatNotifier
     extends FamilyNotifier<AsyncValue<List<ChatMessage>>, String> {
-  Timer? _timer;
+  StreamSubscription<List<ChatMessage>>? _sub;
 
   @override
   AsyncValue<List<ChatMessage>> build(String arg) {
-    _load();
-    _timer = Timer.periodic(const Duration(seconds: 2), (_) => _load());
-    ref.onDispose(() => _timer?.cancel());
+    _startListening();
+    ref.onDispose(() => _sub?.cancel());
     return const AsyncValue.loading();
   }
 
   List<String> get _users => arg.split('|');
 
-  Future<void> _load() async {
-    try {
-      final db = ref.read(dbHelperProvider);
-      final msgs = await db.getPrivateMessages(_users[0], _users[1]);
-      state = AsyncValue.data(msgs);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+  void _startListening() {
+    final db = ref.read(dbHelperProvider);
+    _sub = db.watchPrivateMessages(_users[0], _users[1]).listen(
+      (msgs) => state = AsyncValue.data(msgs),
+      onError: (e, st) => state = AsyncValue.error(e, st),
+    );
   }
 
   Future<void> send(String senderName, String message) async {
-    final receiver = _users.firstWhere((u) => u != senderName,
-        orElse: () => _users[1]);
+    final receiver =
+        _users.firstWhere((u) => u != senderName, orElse: () => _users[1]);
     final db = ref.read(dbHelperProvider);
     await db.insertChatMessage(ChatMessage(
       senderName: senderName,
@@ -84,13 +77,13 @@ class PrivateChatNotifier
       chatType: 'private',
       receiverName: receiver,
     ));
-    await _load();
+    // Stream fires automatically
   }
 
   Future<void> delete(int id) async {
     final db = ref.read(dbHelperProvider);
     await db.deleteChatMessage(id);
-    await _load();
+    // Stream fires automatically
   }
 }
 

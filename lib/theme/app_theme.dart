@@ -48,6 +48,12 @@ class AppColors {
   // Surfaces
   static const surface = Color(0xFFFAF9FF);
   static const cardBg = Colors.white;
+
+  // Design tokens — used across all screens for consistency
+  static const kScaffoldBg = Color(0xFFF5F3FF);
+  static const kCardRadius = 18.0;
+  static const kSheetBg = Color(0xFFF5F3FF);
+  static const kAppBarHeight = 160.0;
 }
 
 class AppTheme {
@@ -99,7 +105,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           color: Colors.white,
-          shadowColor: AppColors.primary.withOpacity(0.08),
+          shadowColor: AppColors.primary.withValues(alpha: 0.08),
           surfaceTintColor: Colors.transparent,
         ),
         appBarTheme: const AppBarTheme(
@@ -128,7 +134,7 @@ class AppTheme {
         navigationBarTheme: NavigationBarThemeData(
           elevation: 0,
           backgroundColor: Colors.white,
-          indicatorColor: AppColors.primary.withOpacity(0.12),
+          indicatorColor: AppColors.primary.withValues(alpha: 0.12),
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return GoogleFonts.nunito(

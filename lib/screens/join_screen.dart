@@ -60,10 +60,10 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                           width: 90,
                           height: 90,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(26),
                             border: Border.all(
-                                color: Colors.white.withOpacity(0.4), width: 2),
+                                color: Colors.white.withValues(alpha: 0.4), width: 2),
                           ),
                           child: const Center(
                             child: Icon(Icons.person_add_alt_1_rounded,
@@ -87,7 +87,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                         child: Text(
                           'ম্যানেজারের কাছ থেকে মেস কোড নিন',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.85),
+                            color: Colors.white.withValues(alpha: 0.85),
                             fontSize: 14,
                           ),
                         ),
@@ -157,7 +157,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                     boxShadow: [
                                       BoxShadow(
                                         color:
-                                            AppColors.teal.withOpacity(0.4),
+                                            AppColors.teal.withValues(alpha: 0.4),
                                         blurRadius: 16,
                                         offset: const Offset(0, 6),
                                       ),
@@ -208,7 +208,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),

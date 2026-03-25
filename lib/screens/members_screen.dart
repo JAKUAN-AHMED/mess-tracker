@@ -15,11 +15,11 @@ class MembersScreen extends ConsumerWidget {
     final state = ref.watch(memberNotifierProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F4FF),
+      backgroundColor: AppColors.kScaffoldBg,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 130,
+            expandedHeight: AppColors.kAppBarHeight,
             floating: false,
             pinned: true,
             backgroundColor: AppColors.primary,
@@ -35,7 +35,7 @@ class MembersScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: const Icon(Icons.people_rounded,
@@ -103,7 +103,7 @@ class MembersScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.4),
+              color: AppColors.primary.withValues(alpha: 0.4),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -173,7 +173,7 @@ class _MemberCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 3),
               ),
@@ -260,7 +260,7 @@ class _MemberCard extends StatelessWidget {
                   height: 28,
                   decoration: BoxDecoration(
                     color: member.isActive
-                        ? AppColors.green.withOpacity(0.12)
+                        ? AppColors.green.withValues(alpha: 0.12)
                         : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -298,7 +298,7 @@ Future<void> _showMemberSheet(
         return Container(
           padding: EdgeInsets.only(bottom: bottomPad),
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: AppColors.kSheetBg,
             borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
           ),
           child: SingleChildScrollView(
@@ -488,7 +488,7 @@ Future<void> _confirmDeactivate(
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: AppColors.red.withOpacity(0.1),
+                color: AppColors.red.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: const Icon(Icons.person_off_rounded,
@@ -542,6 +542,6 @@ Future<void> _confirmDeactivate(
     ),
   );
   if (confirmed == true) {
-    await ref.read(memberNotifierProvider.notifier).deactivateMember(m.id!);
+    await ref.read(memberNotifierProvider.notifier).deactivateMember(m.id);
   }
 }

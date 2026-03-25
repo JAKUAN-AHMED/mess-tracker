@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../database/db_helper.dart';
+import '../database/isar_service.dart';
 
-final dbHelperProvider = Provider<DBHelper>((ref) => DBHelper());
+// Provides the IsarService singleton - same interface as the old DBHelper
+final dbHelperProvider = Provider<IsarService>((ref) => IsarService());

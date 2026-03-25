@@ -74,7 +74,7 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
                       Text(
                         'আপনার মেস সেটআপ করুন এবং ম্যানেজার হিসেবে শুরু করুন',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.85),
+                          color: Colors.white.withValues(alpha: 0.85),
                           fontSize: 14,
                         ),
                       ),
@@ -169,7 +169,7 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
                                     borderRadius: BorderRadius.circular(16),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppColors.primary.withOpacity(0.4),
+                                        color: AppColors.primary.withValues(alpha: 0.4),
                                         blurRadius: 16,
                                         offset: const Offset(0, 6),
                                       ),
@@ -221,7 +221,7 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),

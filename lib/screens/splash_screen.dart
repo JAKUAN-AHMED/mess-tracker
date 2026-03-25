@@ -68,10 +68,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     width: 110,
                     height: 110,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(32),
                       border: Border.all(
-                          color: Colors.white.withOpacity(0.4), width: 2),
+                          color: Colors.white.withValues(alpha: 0.4), width: 2),
                     ),
                     child: const Icon(Icons.restaurant_menu,
                         size: 60, color: Colors.white),
@@ -90,7 +90,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   Text(
                     'আপনার মেসের সব হিসাব এখানে',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.85),
+                      color: Colors.white.withValues(alpha: 0.85),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -100,7 +100,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     width: 32,
                     height: 32,
                     child: CircularProgressIndicator(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       strokeWidth: 3,
                     ),
                   ),

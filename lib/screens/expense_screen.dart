@@ -18,7 +18,7 @@ class ExpenseScreen extends ConsumerWidget {
     final activeMonth = ref.watch(activeMessMonthProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F5FF),
+      backgroundColor: AppColors.kScaffoldBg,
       body: activeMonth.when(
         loading: () => const LoadingWidget(),
         error: (e, _) => Center(child: Text('ত্রুটি: $e')),
@@ -29,7 +29,7 @@ class ExpenseScreen extends ConsumerWidget {
               icon: Icons.calendar_today,
             );
           }
-          return _ExpenseList(messMonthId: month.id!);
+          return _ExpenseList(messMonthId: month.id);
         },
       ),
     );
@@ -47,7 +47,7 @@ class _ExpenseList extends ConsumerWidget {
     final totalAsync = ref.watch(totalExpensesProvider(messMonthId));
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F5FF),
+      backgroundColor: AppColors.kScaffoldBg,
       body: CustomScrollView(
         slivers: [
           // Fancy AppBar
@@ -72,20 +72,31 @@ class _ExpenseList extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               child: const Icon(Icons.shopping_basket_rounded,
                                   color: Colors.white, size: 26),
                             ),
                             const SizedBox(width: 12),
-                            const Text(
-                              'দৈনিক বাজার',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w900,
-                              ),
+                            const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'দৈনিক বাজার',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                Text(
+                                  'বাজার খরচের তালিকা',
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 12),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -97,7 +108,7 @@ class _ExpenseList extends ConsumerWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 10),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(14),
                             ),
                             child: Row(
@@ -165,7 +176,7 @@ class _ExpenseList extends ConsumerWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: AppColors.accent.withOpacity(0.4),
+              color: AppColors.accent.withValues(alpha: 0.4),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -219,7 +230,7 @@ class _ExpenseCard extends StatelessWidget {
             SlidableAction(
               onPressed: (_) => ref
                   .read(expenseNotifierProvider(messMonthId).notifier)
-                  .deleteExpense(expense.id!),
+                  .deleteExpense(expense.id),
               backgroundColor: AppColors.red,
               foregroundColor: Colors.white,
               icon: Icons.delete_rounded,
@@ -235,7 +246,7 @@ class _ExpenseCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 12,
                 offset: const Offset(0, 3),
               ),
@@ -283,7 +294,7 @@ class _ExpenseCard extends StatelessWidget {
               ),
             ),
             children: [
-              _ExpenseItemsList(expenseId: expense.id!),
+              _ExpenseItemsList(expenseId: expense.id),
             ],
           ),
         ),
@@ -433,7 +444,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
 
   Future<void> _loadExistingItems() async {
     final existingItems =
-        await ref.read(dbHelperProvider).getExpenseItems(widget.existing!.id!);
+        await ref.read(dbHelperProvider).getExpenseItems(widget.existing!.id);
     if (mounted) {
       setState(() {
         _items.clear();
@@ -468,7 +479,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
     return Container(
       padding: EdgeInsets.only(bottom: bottomPad),
       decoration: const BoxDecoration(
-        color: Color(0xFFF8F5FF),
+        color: AppColors.kSheetBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Column(
@@ -511,7 +522,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -548,7 +559,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
+                            color: Colors.black.withValues(alpha: 0.04),
                             blurRadius: 8,
                           ),
                         ],
@@ -633,7 +644,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.04),
+                                      color: Colors.black.withValues(alpha: 0.04),
                                       blurRadius: 6,
                                     ),
                                   ],
@@ -673,7 +684,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.04),
+                                      color: Colors.black.withValues(alpha: 0.04),
                                       blurRadius: 6,
                                     ),
                                   ],
@@ -725,7 +736,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    color: AppColors.red.withOpacity(0.1),
+                                    color: AppColors.red.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: const Icon(Icons.close_rounded,
@@ -758,7 +769,7 @@ class _ExpenseBottomSheetState extends ConsumerState<_ExpenseBottomSheet> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.accent.withOpacity(0.4),
+                            color: AppColors.accent.withValues(alpha: 0.4),
                             blurRadius: 14,
                             offset: const Offset(0, 5),
                           ),

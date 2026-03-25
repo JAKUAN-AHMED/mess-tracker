@@ -70,7 +70,7 @@ class _MainShellState extends State<MainShell> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.08),
+              color: AppColors.primary.withValues(alpha: 0.08),
               blurRadius: 20,
               offset: const Offset(0, -4),
             ),

@@ -17,7 +17,7 @@ class DepositScreen extends ConsumerWidget {
     final activeMonth = ref.watch(activeMessMonthProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0FDF4),
+      backgroundColor: AppColors.kScaffoldBg,
       body: activeMonth.when(
         loading: () => const LoadingWidget(),
         error: (e, _) => Center(child: Text('ত্রুটি: $e')),
@@ -28,7 +28,7 @@ class DepositScreen extends ConsumerWidget {
               icon: Icons.calendar_today,
             );
           }
-          return _DepositList(messMonthId: month.id!);
+          return _DepositList(messMonthId: month.id);
         },
       ),
     );
@@ -46,11 +46,11 @@ class _DepositList extends ConsumerWidget {
     final members = ref.watch(activeMemberListProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0FDF4),
+      backgroundColor: AppColors.kScaffoldBg,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 130,
+            expandedHeight: AppColors.kAppBarHeight,
             floating: false,
             pinned: true,
             backgroundColor: AppColors.green,
@@ -66,7 +66,7 @@ class _DepositList extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: const Icon(
@@ -138,7 +138,7 @@ class _DepositList extends ConsumerWidget {
                                 onPressed: (_) => ref
                                     .read(depositNotifierProvider(messMonthId)
                                         .notifier)
-                                    .deleteDeposit(d.id!),
+                                    .deleteDeposit(d.id),
                                 backgroundColor: AppColors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete_rounded,
@@ -153,7 +153,7 @@ class _DepositList extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(18),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.04),
+                                  color: Colors.black.withValues(alpha: 0.04),
                                   blurRadius: 10,
                                   offset: const Offset(0, 3),
                                 ),
@@ -246,7 +246,7 @@ class _DepositList extends ConsumerWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: AppColors.green.withOpacity(0.4),
+              color: AppColors.green.withValues(alpha: 0.4),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -292,7 +292,7 @@ class _DepositList extends ConsumerWidget {
           return Container(
             padding: EdgeInsets.only(bottom: bottomPad),
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: AppColors.kSheetBg,
               borderRadius:
                   BorderRadius.vertical(top: Radius.circular(28)),
             ),

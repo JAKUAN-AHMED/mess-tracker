@@ -55,10 +55,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           width: 90,
                           height: 90,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(26),
                             border: Border.all(
-                                color: Colors.white.withOpacity(0.4), width: 2),
+                                color: Colors.white.withValues(alpha: 0.4), width: 2),
                           ),
                           child: const Center(
                             child: Icon(Icons.manage_accounts_rounded,
@@ -82,7 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: Text(
                           'আপনার পাসওয়ার্ড দিয়ে প্রবেশ করুন',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.85),
+                            color: Colors.white.withValues(alpha: 0.85),
                             fontSize: 14,
                           ),
                         ),
@@ -105,7 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.07),
+                                color: Colors.black.withValues(alpha: 0.07),
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),
                               ),
@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     boxShadow: [
                                       BoxShadow(
                                         color:
-                                            AppColors.primary.withOpacity(0.4),
+                                            AppColors.primary.withValues(alpha: 0.4),
                                         blurRadius: 16,
                                         offset: const Offset(0, 6),
                                       ),

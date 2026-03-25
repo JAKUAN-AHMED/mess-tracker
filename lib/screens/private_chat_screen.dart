@@ -71,7 +71,7 @@ class _PrivateChatScreenState extends ConsumerState<PrivateChatScreen> {
     chatState.whenData((_) => _scrollToBottom());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8F5),
+      backgroundColor: AppColors.kScaffoldBg,
       appBar: AppBar(
         backgroundColor: _otherColor,
         foregroundColor: Colors.white,
@@ -79,7 +79,7 @@ class _PrivateChatScreenState extends ConsumerState<PrivateChatScreen> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [_otherColor, _otherColor.withOpacity(0.7)],
+              colors: [_otherColor, _otherColor.withValues(alpha: 0.7)],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -95,7 +95,7 @@ class _PrivateChatScreenState extends ConsumerState<PrivateChatScreen> {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.25),
+                color: Colors.white.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
@@ -227,10 +227,10 @@ class _PrivateChatScreenState extends ConsumerState<PrivateChatScreen> {
         ],
       ),
     );
-    if (confirmed == true && msg.id != null) {
+    if (confirmed == true) {
       await ref
           .read(privateChatProvider(_chatKey).notifier)
-          .delete(msg.id!);
+          .delete(msg.id);
     }
   }
 }
@@ -271,7 +271,7 @@ class _PrivateBubble extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: isMe
                   ? LinearGradient(
-                      colors: [otherColor, otherColor.withOpacity(0.7)],
+                      colors: [otherColor, otherColor.withValues(alpha: 0.7)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
@@ -290,7 +290,7 @@ class _PrivateBubble extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color:
-                      (isMe ? otherColor : Colors.black).withOpacity(0.12),
+                      (isMe ? otherColor : Colors.black).withValues(alpha: 0.12),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -318,7 +318,7 @@ class _PrivateBubble extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 10,
                         color: isMe
-                            ? Colors.white.withOpacity(0.7)
+                            ? Colors.white.withValues(alpha: 0.7)
                             : Colors.grey.shade400,
                       ),
                     ),
@@ -327,7 +327,7 @@ class _PrivateBubble extends StatelessWidget {
                       Icon(
                         Icons.done_all_rounded,
                         size: 12,
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                     ],
                   ],
@@ -367,7 +367,7 @@ class _PrivateInputBar extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
@@ -423,7 +423,7 @@ class _PrivateInputBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color: accentColor.withOpacity(0.4),
+                          color: accentColor.withValues(alpha: 0.4),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),

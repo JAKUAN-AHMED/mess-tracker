@@ -23,11 +23,11 @@ class _MealToggleScreenState extends ConsumerState<MealToggleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8F0),
+      backgroundColor: AppColors.kScaffoldBg,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 170,
+            expandedHeight: AppColors.kAppBarHeight,
             floating: false,
             pinned: true,
             backgroundColor: AppColors.accent,
@@ -46,20 +46,31 @@ class _MealToggleScreenState extends ConsumerState<MealToggleScreen> {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               child: const Icon(Icons.restaurant_rounded,
                                   color: Colors.white, size: 26),
                             ),
                             const SizedBox(width: 12),
-                            const Text(
-                              'মিল ট্র্যাকার',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w900,
-                              ),
+                            const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'মিল ট্র্যাকার',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                Text(
+                                  'দৈনিক মিলের হিসাব',
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 12),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -69,7 +80,7 @@ class _MealToggleScreenState extends ConsumerState<MealToggleScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
@@ -101,7 +112,7 @@ class _MealToggleScreenState extends ConsumerState<MealToggleScreen> {
                                             .format(_selectedDate),
                                         style: TextStyle(
                                           color: Colors.white
-                                              .withOpacity(0.8),
+                                              .withValues(alpha: 0.8),
                                           fontSize: 12,
                                         ),
                                         textAlign: TextAlign.center,
@@ -201,7 +212,7 @@ class _MealGrid extends ConsumerWidget {
                 final member = memberList[i];
                 final meal = mealMap[member.id] ??
                     Meal(
-                      memberId: member.id!,
+                      memberId: member.id,
                       date: dateKey,
                       breakfast: false,
                       lunch: true,
@@ -215,7 +226,7 @@ class _MealGrid extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 10,
                         offset: const Offset(0, 3),
                       ),
@@ -261,7 +272,7 @@ class _MealGrid extends ConsumerWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: AppColors.accent.withOpacity(0.1),
+                                color: AppColors.accent.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -353,7 +364,7 @@ class _MealChip extends StatelessWidget {
             const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color:
-              active ? activeColor.withOpacity(0.12) : Colors.grey.shade50,
+              active ? activeColor.withValues(alpha: 0.12) : Colors.grey.shade50,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: active ? activeColor : Colors.grey.shade200,

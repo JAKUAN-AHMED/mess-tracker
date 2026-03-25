@@ -1,54 +1,45 @@
+import 'package:isar/isar.dart';
+
+part 'member.g.dart';
+
+@collection
 class Member {
-  final int? id;
-  final String name;
-  final String? phone;
-  final String? email;
-  final String joinDate;
-  final bool isActive;
+  Id id = Isar.autoIncrement;
+  late String name;
+  String? phone;
+  String? email;
+  late String joinDate;
+  bool isActive = true;
 
-  const Member({
-    this.id,
-    required this.name,
-    this.phone,
-    this.email,
-    required this.joinDate,
-    this.isActive = true,
-  });
-
-  Map<String, dynamic> toMap() => {
-        if (id != null) 'id': id,
-        'name': name,
-        'phone': phone ?? '',
-        'email': email ?? '',
-        'join_date': joinDate,
-        'is_active': isActive ? 1 : 0,
-      };
-
-  factory Member.fromMap(Map<String, dynamic> map) => Member(
-        id: map['id'] as int?,
-        name: map['name'] as String,
-        phone: map['phone'] as String?,
-        email: map['email'] as String?,
-        joinDate: map['join_date'] as String,
-        isActive: (map['is_active'] as int) == 1,
-      );
+  Member({
+    required String name,
+    String? phone,
+    String? email,
+    required String joinDate,
+    bool isActive = true,
+  })  : name = name,
+        phone = phone,
+        email = email,
+        joinDate = joinDate,
+        isActive = isActive;
 
   Member copyWith({
-    int? id,
     String? name,
     String? phone,
     String? email,
     String? joinDate,
     bool? isActive,
-  }) =>
-      Member(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        phone: phone ?? this.phone,
-        email: email ?? this.email,
-        joinDate: joinDate ?? this.joinDate,
-        isActive: isActive ?? this.isActive,
-      );
+  }) {
+    final m = Member(
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      joinDate: joinDate ?? this.joinDate,
+      isActive: isActive ?? this.isActive,
+    );
+    m.id = id;
+    return m;
+  }
 
   @override
   String toString() => 'Member(id: $id, name: $name)';

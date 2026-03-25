@@ -60,7 +60,7 @@ class SummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -73,7 +73,7 @@ class SummaryCard extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.12),
+              color: iconColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: iconColor, size: 20),
@@ -142,7 +142,7 @@ class ErrorWidget extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: AppColors.red.withOpacity(0.1),
+                color: AppColors.red.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: const Icon(Icons.error_outline_rounded,
@@ -178,10 +178,10 @@ class EmptyWidget extends StatelessWidget {
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.08),
+                color: AppColors.primary.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(26),
               ),
-              child: Icon(icon, size: 44, color: AppColors.primary.withOpacity(0.4)),
+              child: Icon(icon, size: 44, color: AppColors.primary.withValues(alpha: 0.4)),
             ),
             const Gap(16),
             Text(
@@ -215,7 +215,7 @@ class AmountText extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -252,7 +252,7 @@ class GradientButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: gradient.colors.first.withOpacity(0.35),
+            color: gradient.colors.first.withValues(alpha: 0.35),
             blurRadius: 12,
             offset: const Offset(0, 5),
           ),

@@ -1,20 +1,29 @@
+import 'package:isar/isar.dart';
+
+part 'mess_month.g.dart';
+
+@collection
 class MessMonth {
-  final int? id;
-  final int year;
-  final int month;
-  final bool isActive;
-  final String startDate;
-  final String? endDate;
+  Id id = Isar.autoIncrement;
+  int year = 0;
+  int month = 0;
+  bool isActive = true;
+  String startDate = '';
+  String? endDate;
 
-  const MessMonth({
-    this.id,
-    required this.year,
-    required this.month,
-    this.isActive = true,
-    required this.startDate,
-    this.endDate,
-  });
+  MessMonth({
+    int year = 0,
+    int month = 0,
+    bool isActive = true,
+    String startDate = '',
+    String? endDate,
+  })  : year = year,
+        month = month,
+        isActive = isActive,
+        startDate = startDate,
+        endDate = endDate;
 
+  @ignore
   String get label {
     const banglaMonths = [
       'জানুয়ারি',
@@ -33,38 +42,21 @@ class MessMonth {
     return '${banglaMonths[month - 1]} $year';
   }
 
-  Map<String, dynamic> toMap() => {
-        if (id != null) 'id': id,
-        'year': year,
-        'month': month,
-        'is_active': isActive ? 1 : 0,
-        'start_date': startDate,
-        'end_date': endDate,
-      };
-
-  factory MessMonth.fromMap(Map<String, dynamic> map) => MessMonth(
-        id: map['id'] as int?,
-        year: map['year'] as int,
-        month: map['month'] as int,
-        isActive: (map['is_active'] as int) == 1,
-        startDate: map['start_date'] as String,
-        endDate: map['end_date'] as String?,
-      );
-
   MessMonth copyWith({
-    int? id,
     int? year,
     int? month,
     bool? isActive,
     String? startDate,
     String? endDate,
-  }) =>
-      MessMonth(
-        id: id ?? this.id,
-        year: year ?? this.year,
-        month: month ?? this.month,
-        isActive: isActive ?? this.isActive,
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
-      );
+  }) {
+    final mm = MessMonth(
+      year: year ?? this.year,
+      month: month ?? this.month,
+      isActive: isActive ?? this.isActive,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+    );
+    mm.id = id;
+    return mm;
+  }
 }

@@ -73,8 +73,7 @@ void main() {
   });
 
   group('Meal Rate & Balance Calculation', () {
-    final member1 = Member(id: 1, name: 'করিম', joinDate: '2025-03-01');
-    final member2 = Member(id: 2, name: 'রহিম', joinDate: '2025-03-01');
+    final member1 = Member(name: 'করিম', joinDate: '2025-03-01')..id = 1;
 
     test('meal rate = total expenses / total meal units', () {
       const totalExpenses = 3000.0;

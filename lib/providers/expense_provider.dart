@@ -67,9 +67,7 @@ class ExpenseNotifier extends FamilyNotifier<AsyncValue<List<Expense>>, int> {
     await db.updateExpenseWithItems(expense, items);
     await _load();
     ref.invalidate(totalExpensesProvider(arg));
-    if (expense.id != null) {
-      ref.invalidate(expenseItemsProvider(expense.id!));
-    }
+    ref.invalidate(expenseItemsProvider(expense.id));
   }
 
   Future<void> deleteExpense(int id) async {

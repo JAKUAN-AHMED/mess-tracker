@@ -46,7 +46,7 @@ class _GroupChatScreenState extends ConsumerState<GroupChatScreen> {
     chatState.whenData((_) => _scrollToBottom());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F2FF),
+      backgroundColor: AppColors.kScaffoldBg,
       appBar: AppBar(
         backgroundColor: const Color(0xFF4F46E5),
         foregroundColor: Colors.white,
@@ -61,7 +61,7 @@ class _GroupChatScreenState extends ConsumerState<GroupChatScreen> {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Center(
@@ -190,8 +190,8 @@ class _GroupChatScreenState extends ConsumerState<GroupChatScreen> {
         ],
       ),
     );
-    if (confirmed == true && msg.id != null) {
-      await ref.read(groupChatProvider.notifier).delete(msg.id!);
+    if (confirmed == true) {
+      await ref.read(groupChatProvider.notifier).delete(msg.id);
     }
   }
 }
@@ -268,7 +268,7 @@ class _ChatBubble extends StatelessWidget {
                     color: (isMe
                             ? const Color(0xFF4F46E5)
                             : Colors.black)
-                        .withOpacity(0.12),
+                        .withValues(alpha: 0.12),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -293,7 +293,7 @@ class _ChatBubble extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 10,
                       color: isMe
-                          ? Colors.white.withOpacity(0.7)
+                          ? Colors.white.withValues(alpha: 0.7)
                           : Colors.grey.shade400,
                     ),
                   ),
@@ -343,7 +343,7 @@ class _ChatInputBar extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
@@ -402,7 +402,7 @@ class _ChatInputBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF4F46E5).withOpacity(0.4),
+                          color: const Color(0xFF4F46E5).withValues(alpha: 0.4),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),

@@ -54,11 +54,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final auth = ref.watch(authProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0FF),
+      backgroundColor: AppColors.kScaffoldBg,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 130,
+            expandedHeight: AppColors.kAppBarHeight,
             floating: false,
             pinned: true,
             backgroundColor: AppColors.primary,
@@ -74,7 +74,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: const Icon(Icons.settings_rounded,
@@ -120,7 +120,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.3),
+                        color: AppColors.primary.withValues(alpha: 0.3),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -132,7 +132,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         width: 52,
                         height: 52,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Center(
@@ -163,7 +163,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                   ? 'ম্যানেজার'
                                   : 'সদস্য',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.85),
+                                color: Colors.white.withValues(alpha: 0.85),
                                 fontSize: 13,
                               ),
                             ),
@@ -171,7 +171,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               Text(
                                 auth.messName!,
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.7),
+                                  color: Colors.white.withValues(alpha: 0.7),
                                   fontSize: 11,
                                 ),
                               ),
@@ -195,11 +195,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     trailing: const Icon(Icons.share_rounded,
                         color: AppColors.teal),
                     onTap: () async {
+                      final messenger = ScaffoldMessenger.of(context);
                       try {
                         await BackupService.exportBackup();
                       } catch (e) {
                         if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          messenger.showSnackBar(
                               SnackBar(content: Text('ত্রুটি: $e')));
                         }
                       }
@@ -246,7 +247,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 10,
                       ),
                     ],
@@ -362,7 +363,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   height: 52,
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.red.withOpacity(0.5)),
+                      border: Border.all(color: AppColors.red.withValues(alpha: 0.5)),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: ElevatedButton.icon(
@@ -407,7 +408,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 16, color: AppColors.primary),
@@ -431,7 +432,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
             ),
           ],
@@ -529,7 +530,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: AppColors.red.withOpacity(0.1),
+                    color: AppColors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Icon(Icons.warning_rounded,
@@ -640,7 +641,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
     try {
       final report =
-          await ref.read(monthlyReportProvider(activeMonth.id!).future);
+          await ref.read(monthlyReportProvider(activeMonth.id).future);
       final pdfFile = await ReportService.generatePdf(report, activeMonth);
       final excelFile =
           await ReportService.generateExcel(report, activeMonth);

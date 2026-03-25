@@ -16,7 +16,7 @@ class ReportScreen extends ConsumerWidget {
     final months = ref.watch(messMonthListProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F7FF),
+      backgroundColor: AppColors.kScaffoldBg,
       body: months.when(
         loading: () => const LoadingWidget(),
         error: (e, _) => Center(child: Text('ত্রুটি: $e')),
@@ -49,7 +49,7 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedMonthId = widget.months.first.id!;
+    _selectedMonthId = widget.months.first.id;
   }
 
   @override
@@ -58,11 +58,13 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
         widget.months.firstWhere((m) => m.id == _selectedMonthId);
     final report = ref.watch(monthlyReportProvider(_selectedMonthId));
 
-    return CustomScrollView(
+    return Scaffold(
+      backgroundColor: AppColors.kScaffoldBg,
+      body: CustomScrollView(
       slivers: [
         // AppBar
         SliverAppBar(
-          expandedHeight: 130,
+          expandedHeight: AppColors.kAppBarHeight,
           floating: false,
           pinned: true,
           backgroundColor: AppColors.blue,
@@ -78,7 +80,7 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Icon(Icons.bar_chart_rounded,
@@ -118,11 +120,12 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppColors.kCardRadius),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 12,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -200,7 +203,7 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 12,
                         offset: const Offset(0, 3),
                       ),
@@ -338,8 +341,8 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
                                   decoration: BoxDecoration(
                                     color: isPositive
                                         ? AppColors.green
-                                            .withOpacity(0.12)
-                                        : AppColors.red.withOpacity(0.12),
+                                            .withValues(alpha: 0.12)
+                                        : AppColors.red.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
@@ -440,7 +443,7 @@ class _MonthSelectorState extends ConsumerState<_MonthSelector> {
           ),
         ),
       ],
-    );
+    ));
   }
 }
 
@@ -463,11 +466,11 @@ class _ReportStatCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppColors.kCardRadius),
         boxShadow: [
           BoxShadow(
-            color: gradient.colors.first.withOpacity(0.3),
-            blurRadius: 10,
+            color: gradient.colors.first.withValues(alpha: 0.3),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -475,21 +478,31 @@ class _ReportStatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.white, size: 24),
-          const SizedBox(height: 10),
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: Colors.white, size: 20),
+          ),
+          const SizedBox(height: 12),
           Text(
             value,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.w900,
             ),
           ),
+          const SizedBox(height: 2),
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.85),
+              color: Colors.white.withValues(alpha: 0.85),
               fontSize: 12,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],

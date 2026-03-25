@@ -24,7 +24,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final auth = ref.watch(authProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F0FF),
+      backgroundColor: AppColors.kScaffoldBg,
       body: activeMonth.when(
         loading: () => const LoadingWidget(),
         error: (e, _) => Center(child: Text('ত্রুটি: $e')),
@@ -76,7 +76,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.35),
+                    color: AppColors.primary.withValues(alpha: 0.35),
                     blurRadius: 16,
                     offset: const Offset(0, 6),
                   ),
@@ -109,12 +109,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   Widget _dashboardContent(
       BuildContext context, MessMonth month, AuthState auth) {
-    final report = ref.watch(monthlyReportProvider(month.id!));
+    final report = ref.watch(monthlyReportProvider(month.id));
 
     return RefreshIndicator(
       onRefresh: () async {
         ref.invalidate(activeMessMonthProvider);
-        ref.invalidate(monthlyReportProvider(month.id!));
+        ref.invalidate(monthlyReportProvider(month.id));
       },
       child: CustomScrollView(
         slivers: [
@@ -141,7 +141,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               width: 44,
                               height: 44,
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               child: const Icon(Icons.restaurant_menu_rounded,
@@ -163,7 +163,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   Text(
                                     'স্বাগতম, ${auth.userName ?? "ব্যবহারকারী"}!',
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.85),
+                                      color: Colors.white.withValues(alpha: 0.85),
                                       fontSize: 12,
                                     ),
                                   ),
@@ -177,10 +177,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 8),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(12),
                                     border: Border.all(
-                                        color: Colors.white.withOpacity(0.4),
+                                        color: Colors.white.withValues(alpha: 0.4),
                                         width: 1),
                                   ),
                                   child: const Row(
@@ -207,10 +207,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.15),
+                            color: Colors.white.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                                color: Colors.white.withOpacity(0.3),
+                                color: Colors.white.withValues(alpha: 0.3),
                                 width: 1),
                           ),
                           child: Row(
@@ -231,7 +231,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: Colors.greenAccent.withOpacity(0.3),
+                                  color: Colors.greenAccent.withValues(alpha: 0.3),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Text(
@@ -314,19 +314,21 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
+                        padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          gradient: AppColors.gradientPurplePink,
-                          borderRadius: BorderRadius.circular(10),
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
-                          'সদস্য হিসাব',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 14,
-                          ),
+                        child: const Icon(Icons.people_rounded,
+                            size: 16, color: AppColors.primary),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'সদস্য হিসাব',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1A1A2E),
                         ),
                       ),
                     ],
@@ -343,7 +345,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 12,
                             offset: const Offset(0, 3),
                           ),
@@ -522,7 +524,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             final active = await db.getActiveMessMonth();
                             if (active != null) {
                               await db.closeMessMonth(
-                                  active.id!,
+                                  active.id,
                                   DateFormat('yyyy-MM-dd')
                                       .format(DateTime.now()));
                             }
@@ -583,7 +585,7 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: gradient.colors.first.withOpacity(0.3),
+            color: gradient.colors.first.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -596,7 +598,7 @@ class _StatCard extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: Colors.white, size: 20),
@@ -614,7 +616,7 @@ class _StatCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.85),
+              color: Colors.white.withValues(alpha: 0.85),
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),

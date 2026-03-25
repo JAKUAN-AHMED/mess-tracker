@@ -19,12 +19,12 @@ class ChatHubScreen extends ConsumerWidget {
     final myName = auth.userName ?? '';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F4FF),
+      backgroundColor: AppColors.kScaffoldBg,
       body: CustomScrollView(
         slivers: [
           // Gradient AppBar
           SliverAppBar(
-            expandedHeight: 130,
+            expandedHeight: AppColors.kAppBarHeight,
             floating: false,
             pinned: true,
             backgroundColor: AppColors.blue,
@@ -45,7 +45,7 @@ class ChatHubScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: const Icon(Icons.chat_bubble_rounded,
@@ -180,7 +180,7 @@ class _SectionLabel extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: const Color(0xFF4F46E5).withOpacity(0.1),
+              color: const Color(0xFF4F46E5).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, size: 16, color: const Color(0xFF4F46E5)),
@@ -219,7 +219,7 @@ class _GroupChatTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF4F46E5).withOpacity(0.35),
+              color: const Color(0xFF4F46E5).withValues(alpha: 0.35),
               blurRadius: 14,
               offset: const Offset(0, 5),
             ),
@@ -231,7 +231,7 @@ class _GroupChatTile extends ConsumerWidget {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Center(
@@ -256,7 +256,7 @@ class _GroupChatTile extends ConsumerWidget {
                     loading: () => Text(
                       'লোড হচ্ছে...',
                       style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           fontSize: 12),
                     ),
                     error: (_, __) => const SizedBox.shrink(),
@@ -265,7 +265,7 @@ class _GroupChatTile extends ConsumerWidget {
                           ? 'চ্যাট শুরু করুন!'
                           : '${msg.senderName}: ${msg.message}',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                         fontSize: 12,
                       ),
                       maxLines: 1,
@@ -279,7 +279,7 @@ class _GroupChatTile extends ConsumerWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(Icons.arrow_forward_ios_rounded,
@@ -330,7 +330,7 @@ class _PrivateChatTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 3),
             ),
@@ -346,7 +346,7 @@ class _PrivateChatTile extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: color.withOpacity(0.3),
+                    color: color.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   ),

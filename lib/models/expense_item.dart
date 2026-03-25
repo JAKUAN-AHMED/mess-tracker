@@ -1,27 +1,21 @@
+import 'package:isar/isar.dart';
+
+part 'expense_item.g.dart';
+
+@embedded
 class ExpenseItem {
-  final int? id;
-  final int expenseId;
-  final String itemName;
-  final double price;
+  String itemName = '';
+  double price = 0.0;
 
-  const ExpenseItem({
-    this.id,
-    required this.expenseId,
-    required this.itemName,
-    required this.price,
-  });
+  // Legacy field - not stored in Isar (parent expense owns the relationship)
+  @ignore
+  int expenseId = 0;
 
-  Map<String, dynamic> toMap() => {
-        if (id != null) 'id': id,
-        'expense_id': expenseId,
-        'item_name': itemName,
-        'price': price,
-      };
-
-  factory ExpenseItem.fromMap(Map<String, dynamic> map) => ExpenseItem(
-        id: map['id'] as int?,
-        expenseId: map['expense_id'] as int,
-        itemName: map['item_name'] as String,
-        price: (map['price'] as num).toDouble(),
-      );
+  ExpenseItem({
+    int expenseId = 0,
+    String itemName = '',
+    double price = 0.0,
+  })  : itemName = itemName,
+        price = price,
+        expenseId = expenseId;
 }
