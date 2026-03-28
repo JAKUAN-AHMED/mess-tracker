@@ -1,43 +1,56 @@
-import 'package:isar/isar.dart';
-
-part 'deposit.g.dart';
-
-@collection
 class Deposit {
-  Id id = Isar.autoIncrement;
-  int memberId = 0;
-  double amount = 0.0;
-  String date = '';
-  String note = '';
-  int messMonthId = 0;
+  final String id;
+  final String messId;
+  final String memberId;
+  final double amount;
+  final String date;
+  final String note;
+  final String messMonthId;
 
-  Deposit({
-    int memberId = 0,
-    double amount = 0.0,
-    String date = '',
-    String note = '',
-    int messMonthId = 0,
-  })  : memberId = memberId,
-        amount = amount,
-        date = date,
-        note = note,
-        messMonthId = messMonthId;
+  const Deposit({
+    required this.id,
+    required this.messId,
+    required this.memberId,
+    required this.amount,
+    required this.date,
+    this.note = '',
+    required this.messMonthId,
+  });
 
   Deposit copyWith({
-    int? memberId,
+    String? memberId,
     double? amount,
     String? date,
     String? note,
-    int? messMonthId,
-  }) {
-    final d = Deposit(
-      memberId: memberId ?? this.memberId,
-      amount: amount ?? this.amount,
-      date: date ?? this.date,
-      note: note ?? this.note,
-      messMonthId: messMonthId ?? this.messMonthId,
-    );
-    d.id = id;
-    return d;
-  }
+    String? messMonthId,
+  }) =>
+      Deposit(
+        id: id,
+        messId: messId,
+        memberId: memberId ?? this.memberId,
+        amount: amount ?? this.amount,
+        date: date ?? this.date,
+        note: note ?? this.note,
+        messMonthId: messMonthId ?? this.messMonthId,
+      );
+
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'mess_id': messId,
+        'member_id': memberId,
+        'amount': amount,
+        'date': date,
+        'note': note,
+        'mess_month_id': messMonthId,
+      };
+
+  factory Deposit.fromMap(Map<String, dynamic> m) => Deposit(
+        id: m['_id'] as String,
+        messId: m['mess_id'] as String,
+        memberId: m['member_id'] as String,
+        amount: (m['amount'] as num).toDouble(),
+        date: m['date'] as String,
+        note: (m['note'] as String?) ?? '',
+        messMonthId: m['mess_month_id'] as String,
+      );
 }
