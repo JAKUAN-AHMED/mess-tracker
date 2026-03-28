@@ -1,30 +1,39 @@
-import 'package:isar/isar.dart';
-
-part 'chat_message.g.dart';
-
-@collection
 class ChatMessage {
-  Id id = Isar.autoIncrement;
-  String senderName = '';
-  String message = '';
+  final String id;
+  final String messId;
+  final String senderName;
+  final String message;
+  final String timestamp;
+  final String chatType; // 'group' or 'private'
+  final String? receiverName;
 
-  @Index()
-  String timestamp = '';
+  const ChatMessage({
+    required this.id,
+    required this.messId,
+    required this.senderName,
+    required this.message,
+    required this.timestamp,
+    this.chatType = 'group',
+    this.receiverName,
+  });
 
-  @Index()
-  String chatType = 'group'; // 'group' or 'private'
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'mess_id': messId,
+        'sender_name': senderName,
+        'message': message,
+        'timestamp': timestamp,
+        'chat_type': chatType,
+        'receiver_name': receiverName,
+      };
 
-  String? receiverName; // only for private
-
-  ChatMessage({
-    String senderName = '',
-    String message = '',
-    String timestamp = '',
-    String chatType = 'group',
-    String? receiverName,
-  })  : senderName = senderName,
-        message = message,
-        timestamp = timestamp,
-        chatType = chatType,
-        receiverName = receiverName;
+  factory ChatMessage.fromMap(Map<String, dynamic> m) => ChatMessage(
+        id: m['_id'] as String,
+        messId: m['mess_id'] as String,
+        senderName: m['sender_name'] as String,
+        message: m['message'] as String,
+        timestamp: m['timestamp'] as String,
+        chatType: (m['chat_type'] as String?) ?? 'group',
+        receiverName: m['receiver_name'] as String?,
+      );
 }

@@ -1,17 +1,7 @@
-import 'package:isar/isar.dart';
-
-part 'app_config.g.dart';
-
-@collection
+/// Simple key-value config entry (not a database model; kept for compatibility).
 class AppConfig {
-  Id id = Isar.autoIncrement;
+  final String key;
+  final String value;
 
-  @Index(unique: true)
-  String key = '';
-
-  String value = '';
-
-  AppConfig({String key = '', String value = ''})
-      : key = key,
-        value = value;
+  const AppConfig({required this.key, required this.value});
 }

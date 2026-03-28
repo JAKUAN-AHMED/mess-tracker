@@ -13,12 +13,9 @@ dependencies:
   # State management
   flutter_riverpod: ^2.4.9
 
-  # Database - Isar (NoSQL, fast, reactive)
-  isar: ^3.1.0
-  isar_flutter_libs: ^3.1.0
-
-  # Keep sqflite only for migration (can remove after first run)
+  # Database - SQLite (local, fast) + MongoDB (cloud sync)
   sqflite: ^2.3.2
+  mongo_dart: ^0.9.2
   path: ^1.9.0
 
   # File & Storage
@@ -52,8 +49,6 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   sqflite_common_ffi: ^2.3.2
   flutter_launcher_icons: ^0.13.1
-  isar_generator: ^3.1.0
-  build_runner: ^2.4.8
 
 flutter_launcher_icons:
   android: true
