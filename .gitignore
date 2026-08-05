@@ -41,7 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-branch_structure.json
-temp_auto_push.bat
-temp_interactive_push.bat
-.gitignore
+# --- security hardening ---
+# Editor config can auto-execute commands (VS Code tasks with runOn: folderOpen).
+.vscode/
+.idea/
+.DS_Store
